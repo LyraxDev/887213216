@@ -7,7 +7,7 @@ import RadioDelivery from './Fragments/RadioDelivery';
 import styles from './Form.module.css';
 
 const Form = () => {
-  const { typeBuy, number, complement, address, typePayment, cart, total, order, setOrder, user } = React.useContext(GlobalContext);
+  const { typeBuy, number, setCelular, complement, rua, bairro, typePayment, cart, total, setOrder, user, setName } = React.useContext(GlobalContext);
   const phone = useForm('phone');
   const name = useForm();
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const Form = () => {
   function handleSubmit(event) {
     event.preventDefault();
     if (name.validate() && phone.validate()) {
-      if (typeBuy !== '' && typeBuy === 'store') {
+      if (typeBuy === 'store') {
         setOrder({
           name: name.value,
           phone: phone.value,
@@ -25,27 +25,7 @@ const Form = () => {
           }
         });
         navigate('/completed');
-        console.log(order);
-      } else if (typeBuy !== '' && typeBuy === 'delivery' && address !== null) {
-        if (number !== '' && complement !== '' && typePayment !== '') {
-          setOrder({
-            name: name.value,
-            phone: phone.value,
-            cart: {
-              ...cart,
-              totalPrice: total,
-            },
-            address: {
-              ...address,
-              number: number,
-              complement: complement
-            },
-            payment: typePayment
-          });
-          navigate('/completed');
-          console.log(order);
-        }
-      } else if (typeBuy !== '' && typeBuy === 'delivery' && user !== null) {
+      } else if (typeBuy === 'delivery' && rua && bairro && number && complement && typePayment) {
         setOrder({
           name: name.value,
           phone: phone.value,
@@ -54,18 +34,37 @@ const Form = () => {
             totalPrice: total,
           },
           address: {
-            ...user
+            rua: rua,
+            bairro: bairro,
+            number: number,
+            complement: complement,
           },
           payment: typePayment
         });
         navigate('/completed');
-        console.log(order);
+      } else if (typeBuy === 'delivery' && user) {
+        setOrder({
+          name: name.value,
+          phone: phone.value,
+          cart: {
+            ...cart,
+            totalPrice: total,
+          },
+          address: {
+            rua: user.rua,
+            bairro: user.bairro,
+            number: user.number,
+            complement: user.complement,
+          },
+          payment: typePayment
+        });
+        navigate('/completed');
       }
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <form onSubmit={(event) => {handleSubmit(event); setName(name.value); setCelular(phone.value)}} className={styles.form}>
       <h3 className={styles.title}>Seus dados</h3>
       <Input label="Nome" type="text" name="name" placeholder="Digite seu nome" {...name} />
       <Input label="Celular" type="text" name="phone" placeholder="Digite seu número" {...phone} />
