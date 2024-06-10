@@ -7,34 +7,44 @@ const Finish = () => {
   const { cart, total, typeBuy } = React.useContext(GlobalContext);
 
   const printOrderToConsole = () => {
-    console.log("Pedido:");
+    let pedido = "Pedido:\n";
     cart.forEach(item => {
-      console.log(`${item.title} - R$ ${item.price},00`);
+      pedido += `${item.title} - R$ ${item.price},00\n`;
     });
-    console.log(`Total: R$ ${total},00`);
-    console.log(`Tipo de compra: ${typeBuy === "delivery" ? "Entrega" : "Retirada na loja"}`);
-  };
-
-  const redirectToWhatsApp = () => {
-    const pedidoText = encodeURIComponent(getPedidoText());
-    setTimeout(() => {
-      window.location.href = `https://api.whatsapp.com/send?phone=+558599044621&text=${pedidoText}`;
-    }, 3000);
-  };
-
-  const getPedidoText = () => {
-    let pedido = "Pedido:";
-    cart.forEach(item => {
-      pedido += `%0A${item.title} - R$ ${item.price},00`;
-    });
-    pedido += `%0ATotal: R$ ${total},00`;
-    pedido += `%0ATipo de compra: ${typeBuy === "delivery" ? "Entrega" : "Retirada na loja"}`;
+    pedido += `Total: R$ ${total},00\n`;
+    pedido += `Tipo de compra: ${typeBuy === "delivery" ? "Entrega" : "Retirada na loja"}`;
+    console.log(pedido);
     return pedido;
   };
 
+  const sendOrderToDiscord = async () => {
+    const webhookUrl = 'https://discord.com/api/webhooks/1249836268481810483/GREVmO7mo_X22FUk2HAJBgWO4Bt1eaFossvig1thd_5drGkbki44KS0t5w72CYxP9mna';
+    const pedidoText = printOrderToConsole();
+    const payload = {
+      content: pedidoText
+    };
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        console.log('Pedido enviado para o Discord com sucesso');
+      } else {
+        console.error('Erro ao enviar pedido para o Discord');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar pedido para o Discord', error);
+    }
+  };
+
   React.useEffect(() => {
-    printOrderToConsole();
-    redirectToWhatsApp();
+    sendOrderToDiscord();
   }, []);
 
   return (
@@ -58,7 +68,7 @@ const Finish = () => {
         <p className={styles.orderStore}>Em 25 minutos seu pedido estará pronto para ser retirado em nossa loja.</p>
       )}
     </div>
-  )
+  );
 }
 
 export default Finish;
