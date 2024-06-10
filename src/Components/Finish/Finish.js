@@ -4,7 +4,7 @@ import styles from './Finish.module.css';
 import CartItem from '../Home/Cart/CartItem';
 
 const Finish = () => {
-  const { cart, total, typeBuy } = React.useContext(GlobalContext);
+  const { cart, total, typeBuy, rua, bairro, number, typePayment, cel, complement, user, name, obs } = React.useContext(GlobalContext);
 
   const printOrderToConsole = () => {
     let pedido = "Pedido:\n";
@@ -18,8 +18,19 @@ const Finish = () => {
   };
 
   const sendOrderToDiscord = async () => {
-    const webhookUrl = 'https://discord.com/api/webhooks/1249836268481810483/GREVmO7mo_X22FUk2HAJBgWO4Bt1eaFossvig1thd_5drGkbki44KS0t5w72CYxP9mna';
-    const pedidoText = printOrderToConsole();
+    const webhookUrl = 'https://discord.com/api/webhooks/1249860166464176180/pIh1VeccOtT-j3KwNYVP7gVllZ1iHzovKTtqy7F84Oiw2TuDhKqWO6qfscAqeddtLShi';
+    let pedidoText = "Pedido:\n";
+    cart.forEach(item => {
+      pedidoText += `${item.title} - R$ ${item.price},00\n`;
+    });
+    pedidoText += `Total: R$ ${total},00\n`;
+    pedidoText += `Tipo de compra: ${typeBuy === "delivery" ? "Entrega" : "Retirada na loja"}\n`;
+    pedidoText += `Nome: ${name}\n`;
+    pedidoText += `Endereço: Rua ${rua}, Bairro ${bairro}, Número ${number}, Complemento ${complement}\n`;
+    pedidoText += `Observações: ${obs}\n`;
+    pedidoText += `Número do cliente: ${cel}\n`;
+    pedidoText += `Forma de pagamento: ${typePayment}`;
+
     const payload = {
       content: pedidoText
     };
