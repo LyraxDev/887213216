@@ -134,6 +134,18 @@ export const GlobalStorage = ({ children }) => {
           "title": "À Moda da Casa",
           "description": "Molho de tomate, calabresa, bacon, tomate, cebola e orégano",
           "price": 8,
+        },
+        {
+          "id": 13,
+          "title": "Brigadeiro",
+          "description": "Chocolate ao leite e granulado.",
+          "price": 8,
+        },
+        {
+          "id": 14,
+          "title": "M&M",
+          "description": "Chocolate ao leite e M&M",
+          "price": 8,
         }
       ]
     } else if (category === "Bebidas") {
