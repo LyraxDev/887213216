@@ -152,9 +152,21 @@ export const GlobalStorage = ({ children }) => {
       jsonData = [
         {
           "id": 1,
-          "title": "Refrigerante 2L",
-          "description": "Ao finalizar o pedido, você será encaminhado para nosso atendimento via WhatsApp. Lá, você poderá perguntar quais refrigerantes estão disponíveis e obter informações atualizadas sobre os preços.",
-          "price": null
+          "title": "Coca-Cola",
+          "description": "Sabor original. (2 LITROS)",
+          "price": 12
+        },
+        {
+          "id": 2,
+          "title": "Cajuina São Geraldo",
+          "description": "2 LITROS",
+          "price": 12
+        },
+        {
+          "id": 3,
+          "title": "Coca-Cola",
+           "description": "Lata 350ML",
+          "price": 5
         }
       ]
     } else {
